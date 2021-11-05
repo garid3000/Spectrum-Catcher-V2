@@ -1,9 +1,10 @@
 import os, time, sys
 import curses
 from curses.textpad import rectangle
-from devinput import *
-from button_manager import *
-from pyv4l2 import Py_v4l2
+
+from Custom_Lib.devinput import *
+from Custom_Lib.button_manager import *
+from Custom_Lib.pyv4l2 import Py_v4l2
 
 #spe camera
 dev = '/dev/video{}'.format(0)
