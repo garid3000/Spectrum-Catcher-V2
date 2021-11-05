@@ -1,7 +1,7 @@
 import os, time
 import curses
 
-from Custom_Lib.devinput import *
+from Custom_Lib.devinput       import *
 from Custom_Lib.button_manager import *
 
 aboutstr = 'Spectrum Catcher V2.0\n developed by Hokkaido Uni. \n License notice: this software uses following GPL/LGPL softwares that are provided from OS'
@@ -50,29 +50,34 @@ def init():
     bm.setCallback('mb5_3', callback_mb5_3)
 
 def callback_mb1_1():
-    os.system('bash /home/pi/shells/shot1.sh')
+    #os.system('bash /home/pi/shells/shot1.sh')
+    os.system('bash ~/Spectrum-Catcher-V2/shot1.sh')
     curses.curs_set(False)
 
 def callback_mb1_3():
-    os.system('bash /home/pi/shells/preview_cam.sh')
+    os.system('bash ~/Spectrum-Catcher-V2/preview_cam.sh')
+    #os.system('bash /home/pi/shells/preview_cam.sh')
     curses.curs_set(False)
 
 def callback_mb1_4():
     curses.endwin()
     #os.system('bash /home/pi/shells/preview_spe.sh')
-    os.system('bash /home/pi/main2/shower.sh')
+    #os.system('bash /home/pi/main2/shower.sh')
+    os.system('bash ~/Spectrum-Catcher-V2/shower.sh')
     bm.stdscr.keypad(False)
     curses.echo()
     curses.curs_set(False)
 
 def callback_mb2_1():
-    os.system('python3 /home/pi/main2/setup_expo.py')
+    #os.system('python3 /home/pi/main2/setup_expo.py')
+    os.system('python3 ~/Spectrum-Catcher-V2/setup_expo.py')
     curses.nocbreak()
     bm.stdscr.keypad(False)
     curses.echo()
     curses.curs_set(False)
 def callback_mb2_2():
-    os.system('python3 /home/pi/main2/setup_gain.py')
+    #os.system('python3 /home/pi/main2/setup_gain.py')
+    os.system('python3 ~/Spectrum-Catcher-V2/setup_gain.py')
     curses.nocbreak()
     bm.stdscr.keypad(False)
     curses.echo()

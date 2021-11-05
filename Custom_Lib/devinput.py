@@ -1,9 +1,10 @@
+from os.path import expanduser as home
 import numpy as np
 import evdev
 
 def touch_event_identifier(save = False):
     path  = '/proc/bus/input/devices'
-    path1 = '~/Spectrum-Catcher-V2/touchscreen'
+    path1 = home('~/Spectrum-Catcher-V2/touchscreen')
 
     f = open(path, 'r')
     lines = f.readlines()
@@ -29,8 +30,8 @@ def touch_event_identifier(save = False):
     return devent
 
 #click_state = 1
-tcalx = np.load('~/Spectrum-Catcher-V2/touch_calib_x.npy')
-tcaly = np.load('~/Spectrum-Catcher-V2/touch_calib_y.npy')
+tcalx = np.load(home('~/Spectrum-Catcher-V2/touch_calib_x.npy'))
+tcaly = np.load(home('~/Spectrum-Catcher-V2/touch_calib_y.npy'))
 
 def getTouch():
     dev = evdev.InputDevice(touch_event_identifier())

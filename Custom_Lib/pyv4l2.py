@@ -1,6 +1,6 @@
 import os, time
 
-dev = '/dev/video2'
+dev = '/dev/video2'   # if you're using this file as standalone, choose correct device path
 class Py_v4l2():
     def __init__(self, dev, optimize_every=3, upperBorder = 230, lowerBorder = 100):
         self.possible_expos = [1, 2, 5, 10, 20, 39, 78, 156, 312, 625, 1250, 2500]
