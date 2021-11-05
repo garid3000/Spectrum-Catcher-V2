@@ -1,8 +1,8 @@
 import os, time
 import curses
 
-from devinput import *
-from button_manager import *
+from Custom_Lib.devinput import *
+from Custom_Lib.button_manager import *
 
 aboutstr = 'Spectrum Catcher V2.0\n developed by Hokkaido Uni. \n License notice: this software uses following GPL/LGPL softwares that are provided from OS'
 #. Those softwares are ffmpeg, bash, ncurses, opencv2'
