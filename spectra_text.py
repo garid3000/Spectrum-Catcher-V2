@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 import plotext as plt
 
-from pyv4l2 import Py_v4l2
+from Custom_Lib.pyv4l2 import Py_v4l2
 
 
 
