@@ -27,7 +27,10 @@ class Button():
         if self.boxshow:
             self.win.box()
     def writeLabel(self):
-        self.win.addstr(1 + (self.sizey-2)//2,
+        #self.win.addstr(1 + (self.sizey-2)//2,
+        #                1,
+        #                self.label)
+        self.win.addstr(1,
                         1,
                         self.label)
 
