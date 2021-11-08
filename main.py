@@ -4,7 +4,7 @@ import curses
 from Custom_Lib.devinput       import *
 from Custom_Lib.button_manager import *
 
-aboutstr = 'Spectrum Catcher V2.0\n developed by Hokkaido Uni. \n License notice: this software uses following GPL/LGPL softwares that are provided from OS'
+aboutstr = 'Spectrum Catcher V2.0\n developed by Hokkaido Uni.\n License notice: this software uses following GPL/LGPL softwares that are provided from Raspberry-OS'
 #. Those softwares are ffmpeg, bash, ncurses, opencv2'
 
 bm = None
@@ -18,7 +18,7 @@ def init():
     bm.addTagButton(   3, 1, 3,  7, "Setup", tag="mb2", buttonId="b", show=True)
     bm.addTagButton(   6, 1, 3,  7, "Data" , tag="mb3", buttonId="c", show=True)
     bm.addTagButton(   9, 1, 3,  7, "About", tag="mb4", buttonId="d", show=True)
-    bm.addTagButton(  12, 1, 3,  7, "Off  ", tag="mb5", buttonId="e", show=True)
+    bm.addTagButton(  12, 1, 3,  7, "Sys.", tag="mb5", buttonId="e", show=True)
 
     bm.addButton(1+ 1, 9, 3, 14, "1-Shot",    tag="mb1", buttonId="mb1_1")
     bm.addButton(1+ 4, 9, 3, 14, "M-Shot",    tag="mb1", buttonId="mb1_2")
@@ -33,10 +33,11 @@ def init():
     bm.addButton(1+ 7, 9, 3, 14, "Del. data", tag="mb3", buttonId="mb3_3")
     bm.addButton(   1, 9,13, 28, aboutstr,    tag="mb4", buttonId="mb4_1",
                                                          boxshow=False)
-    bm.addButton(1+ 1, 10, 3, 20, "System is about to\n shutdown:",
+    bm.addButton(   1, 10, 1, 20, "---- System -----",
                                   tag="mb5", buttonId="mb5_1", boxshow=False)
-    bm.addButton(1+ 7, 15, 3, 10, "Shutdown", tag="mb5", buttonId="mb5_2")
-    bm.addButton(1+10, 15, 3, 10, "Reboot",   tag="mb5", buttonId="mb5_3")
+    bm.addButton(1+ 4, 15, 3, 10, "Shutdown", tag="mb5", buttonId="mb5_2")
+    bm.addButton(1+ 7, 15, 3, 10, "Reboot",   tag="mb5", buttonId="mb5_3")
+    bm.addButton(1+10, 15, 3, 10, "Update",   tag="mb5", buttonId="mb5_4")
     #bm.addButton(1+10, 9, 3, 14, "---------", tag="mb3", buttonId="mb3_4")
 
     bm.setCallback('mb1_1', callback_mb1_1)
