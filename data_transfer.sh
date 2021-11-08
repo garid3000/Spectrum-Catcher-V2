@@ -2,6 +2,7 @@
 # 1st argument /dev/sda1
 # 2nd argument cp or mv
 # example ./data_transfer.sh /dev/sda1 mv   #for move
+# example ./data_transfer.sh $(ls /dev/sda* | tails -n 1) mv   #for move
 
 #mounting
 sudo mount $1 /mnt/usb
