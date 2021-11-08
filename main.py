@@ -29,8 +29,8 @@ def init():
 
     bm.addButton(1+ 1, 9, 3, 14, "Expo",      tag="mb2", buttonId="mb2_1")
     bm.addButton(1+ 4, 9, 3, 14, "Gain",      tag="mb2", buttonId="mb2_2")
-    bm.addButton(1+ 7, 9, 3, 14, "Timer",     tag="mb2", buttonId="mb2_3")
-    bm.addButton(1+10, 9, 3, 14, "Multi",     tag="mb2", buttonId="mb2_4")
+    #bm.addButton(1+ 7, 9, 3, 14, "Timer",     tag="mb2", buttonId="mb2_3")
+    #bm.addButton(1+10, 9, 3, 14, "Multi",     tag="mb2", buttonId="mb2_4")
 
     bm.addButton(1+ 1, 9, 3, 14, "Copy data", tag="mb3", buttonId="mb3_1")
     bm.addButton(1+ 4, 9, 3, 14, "Move data", tag="mb3", buttonId="mb3_2")
