@@ -88,6 +88,8 @@ def callback_mb5_2():
     os.system('sudo shutdown 0')
 def callback_mb5_3():
     os.system('sudo reboot')
+def callback_mb5_4():
+    os.system('bash ~/Spectrum-Catcher-V2/update.sh')
 
 def main(stdscr):
     global bm
