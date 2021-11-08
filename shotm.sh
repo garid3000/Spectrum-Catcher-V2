@@ -1,3 +1,4 @@
+
 rm ~/spe.bmp
 rm ~/cam.bmp
 ffmpeg -hide_banner -loglevel error -i /dev/video2 -t 3 -vf drawbox=200:200:300:300 -pix_fmt bgra -f fbdev /dev/fb0

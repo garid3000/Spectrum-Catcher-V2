@@ -15,3 +15,8 @@ Spectrum-Catcher-V2 Software
     - git
 3. Touch panel
     - LCD-show from manufacturer
+
+
+Req:
+
+chmod 666 /dev/mnt

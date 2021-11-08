@@ -167,7 +167,7 @@ if eng == 'ffmpeg':       #from ffmpeg
                '-i', device,
                '-f', 'image2pipe',
                '-pix_fmt', 'bgr24',
-               '-r', '2',
+               '-r', '1',
                #'-video_size', '1280x720',
                #'-video_size', '480x640',
                '-vcodec', 'rawvideo',
