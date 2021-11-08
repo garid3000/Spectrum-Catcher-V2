@@ -1,0 +1,100 @@
+example python3 spectra_text.py -s --output=some/folder/name --datatype=bmp,csv,mat,npy,plotpic --optimize=normal --engine=ffmpeg --number=10 --timer=4 --nametag=testname
+
+-v --verbose:   for debugging purposes,
+                outputs arguments in sys.argvs
+
+-D --device=    (Requires value)
+                For choosing camera device path.
+                usage:
+                    -D /dev/video0
+                    --device=/dev/video0
+                If not specified, it will try to use default val (/dev/video0)
+
+-o --output=    (Requires value)
+                For choosing output directory,
+                if that dir doesnt exist, automatically created new.
+                usage:
+                    -o some/folder/name
+                    --device=some/folder/name
+                if not specified, it wont save any data.
+
+-d --datatype=  (Requires value(s))
+                For choosing which file format to save data.
+                choose 1 or many from, following avialable formats:
+                    bmp: raw image
+                    csv: comma seperated values as text file
+                    npy: numpy array
+                    mat: matlabs data file
+                    plotpic: plotted png graph
+                usage:
+                    -d bmp,csv,mat
+                    --datatype bmp,csv,plotpic
+                if not specified, it wont save any data.
+
+-O --optimize=  (Requires value)
+                optimization method: available choices are:
+                    all:    in multiple shots, optimize before each shot
+                    no:     no optimiztion
+                    once:   in multiple shots, optimize only once at the 1st shot
+                    normal: in multiple shots, optimize while making measurements
+                usage:
+                    -O once
+                    --optimtize=normal
+
+-e --engine=    (Requires value)
+                Choosing engine that captures image from camera.
+                Available choices are:
+                    ffmpeg: (Default value, if not specified)
+                    cv2:
+                usage:
+                    -e cv2
+                    --engine=ffmpeg
+
+-n --number=    (Requires value)
+                Number of shots.
+                usage:
+                    -n 8
+                    --number=50
+
+-t --timer=     (Requires value)
+                How many second between each shot.
+                usage:
+                    -t 5                   (try to shot every 5 sec)
+                    --timer=10             (try to shot every 10 sec)
+                /p.s. better to use longer timer value with all-optimization
+                                and short  timer value with normal-optimization/
+
+-p --pov=       (Requires value) #not implemented yet
+                how may section to divide the POV
+                usage:
+                    -p 5                    (divide pov into 5 sections)
+                    --pov=1                 (1 is the defualt value if not specified)
+
+-s --show       printing out TUI graph on terminal
+                usage
+                    -s
+                    --show
+
+-M  --optupper= (Requires value between 0 to 255)
+                upper edge of steady state
+                i.e. if max of spectra is higher than this value
+                it'll change the exposure time.
+                usage:
+                    -M 230
+                    --optupper=220
+
+-m  --optlower= (Requires value between 0 to 255)
+                lower edge of steady state
+                i.e. if max of spectra is lower than this value
+                it'll change the exposure time.
+                usage:
+                    -m 100
+                    --optlower=80
+
+-N --nametag=   (Requires value)
+                output files name tag
+                usage
+                    -N testname
+                    --nametag testname
+
+-h --help       Show this text

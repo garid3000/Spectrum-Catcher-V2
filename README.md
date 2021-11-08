@@ -8,6 +8,8 @@ Spectrum-Catcher-V2 Software
     - getopt
     - numpy
     - plotext
+    - !!inotyfy ?
+    - matplotlib
 2. System
     - ffmpeg
     - git

@@ -28,9 +28,12 @@ longopts = ["verbose",
             "show",              #show                       ifnot yes
             "optupper=",         #optimization upper         ifnot 230
             "optlower=",         #optimization upper         ifnot 100
-            "nametag="]
+            "nametag=",
+            "help"
+            ]
 
-shortopts = "vD:o:d:O:e:n:t:p:sM:m:N:"
+
+shortopts = "vD:o:d:O:e:n:t:p:sM:m:N:h"
 
 argv = sys.argv[1:]
 try:
@@ -39,7 +42,7 @@ except:
     #print("Usage: python3 filename.py -o outFolder -ft bmp,csv,npy,dat -e ffmpeg")
     print("python3 spectra_text.py -s --output=some/folder/name --datatype=bmp,csv,mat,npy --optimize=normal --engine=ffmpeg --number=10 --timer=4 --nametag=testname")
 
-alldatatypes = ['bmp', 'csv', 'npy', 'mat']
+alldatatypes = ['bmp', 'csv', 'npy', 'mat', 'plotpic']
 v = False
 outdir   = None
 datatypes= ['bmp']
@@ -56,12 +59,14 @@ tag      = 'shot'
 print(options)
 ############################################################################
 for name, value in options:
+    if '\n' in value:
+        print('newline')
     if v:
         print(name, value)
         #if name in ['-v', '--verbose']:
         v = True
     elif name in ['-D', '--device']:
-        if os.path.isdir(value) and '/dev/video' in value:  #explicitly linux
+        if os.path.exists(value) and '/dev/video' in value:  #explicitly linux
             device = value
         else:
             print("Error: {} cam device not found".format(value))
@@ -78,6 +83,8 @@ for name, value in options:
             print(datatypes)
         if 'mat' in datatypes:
             from scipy.io import savemat
+        if 'plotpic' in datatypes:
+            import matplotlib.pyplot as matplt
 
     elif name in ['-O', '--optimize']:
         opt = 'all'    *(value == 'all')
@@ -140,6 +147,12 @@ for name, value in options:
     elif name in ['-N', '--nametag']:
         tag = value
 
+    elif name in ['-h', '--help']:
+        if name in ['-h']:
+            os.system('cat ~/Spectrum-Catcher-V2/spectra_h.txt')
+        if name in ['--help']:
+            os.system('cat ~/Spectrum-Catcher-V2/spectra_help.txt')
+        sys.exit(0)
 
 ##############################################################################
 width = 640
@@ -287,27 +300,40 @@ try:
 
 
         # saving
+        fnametag = '{}/{}_{:04d}_s{:05d}'.format(outdir, tag, iii+1, int(time.time() - time_init))
         if outdir != None: #meaning it should save
             if 'bmp' in datatypes:
                 im = Image.fromarray(frame)
-                im.save('{}/{}_{}.bmp'.format(outdir, tag, iii))
+                im.save('{}.bmp'.format(fnametag))
             if 'npy' in datatypes:
-                np.save('{}/{}_{}.npy'.format(outdir, tag, iii), frame)
+                np.save('{}.npy'.format(fnametag), frame)
 
             if 'mat' in datatypes:
                 savingDict = {  'pov':spectra,
                                 'ref':spectra1,
                              }
-                savemat('{}/{}_{}.mat'.format(outdir, tag, iii),
+                savemat('{}.mat'.format(fnametag),
                         savingDict)
             if 'csv' in datatypes:
                 savingArray = np.empty((480, 2), dtype='uint8')
                 savingArray[:,0] = spectra
                 savingArray[:,1] = spectra1
-                np.savetxt('{}/{}_{}.csv'.format(outdir, tag, iii),
+                np.savetxt('{}.csv'.format(fnametag),
                         savingArray, delimiter = ','
                         )
-
+            if 'plotpic' in datatypes:
+                matplt.clf()
+                matplt.plot(spectra , label='POV')
+                matplt.plot(spectra1, label='REF')
+                matplt.ylabel("Digital Val")
+                matplt.ylim(0, 255)
+                matplt.xlabel("Wavelength")
+                matplt.title("({} of {})   Exposure {}, Gain:{}, Spectrum:".format(
+                    iii+1, num,
+                    v4l2.possible_expos[v4l2.expo_i],
+                    v4l2.gain))
+                matplt.legend()
+                matplt.savefig('{}.png'.format(fnametag))
 
 
 

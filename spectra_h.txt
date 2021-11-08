@@ -1,0 +1,16 @@
+example: python3 spectra_text.py -s --output=some/folder/name --datatype=bmp,csv,mat,npy,plotpic --optimize=normal --engine=ffmpeg --number=10 --timer=4 --nametag=testname
+
+-v --verbose
+-D --device=        /dev/video0
+-o --output=        some/out/dir
+-d --datatype=      bmp,csv,npy,mat,plotpic
+-O --optimize=      all | no | once | normal
+-e --engine=        ffmpeg | cv2
+-n --number=        (number  of shots)
+-t --timer=         (sec)
+-p --pov=           (number of sections)
+-s --show
+-M --optupper=      230 (optimization upper edge)
+-m --optlower=      100 (optimization lower edge)
+-N --nametag=       filename
+-h --help           show this
