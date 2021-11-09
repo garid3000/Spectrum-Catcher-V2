@@ -2,12 +2,16 @@
 import time, sys, os
 import getopt
 import subprocess
+from threading  import Thread
+from queue import Queue, Empty
 
 import numpy as np
 from PIL import Image
 import plotext as plt
 
 from Custom_Lib.pyv4l2 import Py_v4l2
+from queue import Queue, Empty
+
 
 
 
@@ -29,11 +33,12 @@ longopts = ["verbose",
             "optupper=",         #optimization upper         ifnot 230
             "optlower=",         #optimization upper         ifnot 100
             "nametag=",
-            "help"
+            "help",
+            "showfb"
             ]
 
 
-shortopts = "vD:o:d:O:e:n:t:p:sM:m:N:h"
+shortopts = "vD:o:d:O:e:n:t:p:sM:m:N:hS"
 
 argv = sys.argv[1:]
 try:
@@ -56,6 +61,8 @@ show     = False
 optupper = 230
 optlower = 100
 tag      = 'shot'
+showfb   = False
+
 #print(options)
 ############################################################################
 for name, value in options:
@@ -151,10 +158,15 @@ for name, value in options:
         if name in ['--help']:
             os.system('cat ~/Spectrum-Catcher-V2/spectra_help.txt')
         sys.exit(0)
+    elif name in ['-S', '--showfb']:
+        showfb = True
+        if v:
+            print('optup', optupper)
 
 ##############################################################################
 width = 640
 height = 480
+stop_threads = False
 
 #width = 1280
 #height = 720
@@ -166,7 +178,7 @@ if eng == 'ffmpeg':       #from ffmpeg
                #'-i', '/dev/video2',
                '-f', 'image2pipe',
                '-pix_fmt', 'bgr24',
-               '-r', '2',
+               '-r', '5',
                #'-video_size', '1280x720',
                #'-video_size', '480x640',
                '-vcodec', 'rawvideo',
@@ -176,18 +188,37 @@ if eng == 'ffmpeg':       #from ffmpeg
                #'-map', '1',  '/dev/fb0'
                ]
 
-    command1 = ['ffmpeg',
+    command2 = ['ffmpeg',
                '-hide_banner',  '-loglevel', 'error',
+               #'-i', device,
                '-i', '/dev/video2',
-               #'-pix_fmt', 'bgr24',
+               '-f', 'image2pipe',
                '-pix_fmt', 'bgra',
-               '-f', 'fbdev', '/dev/fb0'
+               '-r', '5',
+               #'-video_size', '1280x720',
+               #'-video_size', '480x640',
+               '-vcodec', 'rawvideo',
+               '-an', '-sn',
+               '-'
+               #'-map', '0',  '-',
+               #'-map', '1',  '/dev/fb0'
                ]
+    #command1 = ['ffmpeg',
+    #           '-hide_banner',  '-loglevel', 'error',
+    #           '-i', '/dev/video2',
+    #           #'-pix_fmt', 'bgr24',
+    #           '-pix_fmt', 'bgra',
+    #           '-f', 'fbdev', '/dev/fb0'
+    #           ]
     # Open sub-process that gets in_stream as input and uses stdout as an output PIPE.
-    p1 = subprocess.Popen(command, stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(command1)
+    #p1 = subprocess.Popen(command,  stdout=subprocess.PIPE)
+    #if showfb:
+    #    p2 = subprocess.Popen(command2, stdout=subprocess.PIPE)
+    #p2 = subprocess.Popen(command1)
+
 
     def readFrame():
+        p1.stdout.flush()
         raw_frame = p1.stdout.read(width * height * 3)
         #raw_frame, err = p1.communicate(width * height * 3)
         #frame = np.fromstring(raw_frame, np.uint8)
@@ -195,6 +226,66 @@ if eng == 'ffmpeg':       #from ffmpeg
         frame = frame.reshape((height, width, 3))
         #print(frame.shape, time.ctime())
         return frame
+
+    def readFrame2():
+        w = 1024
+        h = 768
+
+        raw_frame = p2.stdout.read(w * h * 4)
+        #raw_frame, err = p1.communicate(width * height * 3)
+        #frame = np.fromstring(raw_frame, np.uint8)
+        frame = np.frombuffer(raw_frame, np.uint8)
+        frame = frame.reshape((h, w, 4))
+        #frame1 = frame[:480, :640, :3]
+        #frame1 = frame[:480, :640, 4]
+        #np.save('/home/pi/s.npy', frame[:480,:640,4])
+        #print(frame.shape, time.ctime())
+        return np.ascontiguousarray(frame[:480,:640,:])
+
+    def paralel1(out, queue1):
+        global stop_threads
+
+        while 1:
+            #out.flush()
+            raw_frame = out.read(width * height * 3)
+            frame = np.frombuffer(raw_frame, np.uint8)
+            frame = frame.reshape((height, width, 3))
+            queue1.put(frame)
+            if stop_threads:
+                break
+
+    def paralel2(out, queue2):
+        global stop_threads
+        w = 1024
+        h = 768
+        while 1:
+            raw_frame = out.read(w * h * 4)
+            frame = np.frombuffer(raw_frame, np.uint8)
+            frame = frame.reshape((h, w, 4))
+            f2 = np.ascontiguousarray(frame[:480,:640,:])
+            #queue2.put(np.ascontiguousarray(frame[:480,:640,:]))
+            queue2.put(f2)
+            if stop_threads:
+                break
+
+            with open('/dev/fb0', 'rb+') as buf:
+                #f2 = readFrame2()
+                buf.write(f2)
+
+    ON_POSIX = 'posix' in sys.builtin_module_names
+    p1 = subprocess.Popen(command,  stdout=subprocess.PIPE, close_fds=ON_POSIX)
+    p2 = subprocess.Popen(command2, stdout=subprocess.PIPE, close_fds=ON_POSIX)
+
+    q1 = Queue()
+    q2 = Queue()
+
+    t1 = Thread(target=paralel1, args=(p1.stdout, q1))
+    t1.daemon = True # thread dies with the program
+    t1.start()
+
+    t2 = Thread(target=paralel2, args=(p2.stdout, q2))
+    t2.daemon = True # thread dies with the program
+    t2.start()
 
 elif eng == 'cv2':          #from ffmpeg
     def readFrame():
@@ -224,6 +315,18 @@ try:
     for iii in range(num):
         time_fori = time_init + iii * timersec
         #print(time_fori)
+        #if showfb:
+        if False:
+            f2 = q2.get(timeout=1)
+            while 1:
+                if q2.empty():
+                    break
+                f2 = q2.get(timeout = 1)
+            with open('/dev/fb0', 'rb+') as buf:
+                #f2 = readFrame2()
+                buf.write(f2)
+                time.sleep(.1)
+
         while time.time() <= time_fori:
             time.sleep(.1)
             #print(time.time(), time_fori)
@@ -231,7 +334,8 @@ try:
 
         #reading cam and getting spectrum
         if opt == 'no':
-            frame = readFrame()
+            #frame = readFrame()
+            frame = q1.get(timeout = 1)
             segment = frame[:,250:280,0]
             spectra = np.mean(segment, axis = 1)
             segment = frame[:,350:380,0]
@@ -240,7 +344,8 @@ try:
 
         elif opt == 'all':
             while 1:
-                frame = readFrame()
+                #frame = readFrame()
+                frame = q1.get(timeout = 1)
                 segment = frame[:,250:280,0]
                 spectra = np.mean(segment, axis = 1)
                 segment = frame[:,350:380,0]
@@ -258,7 +363,8 @@ try:
                     break
         elif opt == 'once':
             while 1:
-                frame = readFrame()
+                #frame = readFrame()
+                frame = q1.get(timeout = 1)
                 segment = frame[:,250:280,0]
                 spectra = np.mean(segment, axis = 1)
                 segment = frame[:,350:380,0]
@@ -276,7 +382,8 @@ try:
                     break
             opt = 'no'  #after once, no optimization on next loop
         elif opt == 'normal':
-            frame = readFrame()
+            #frame = readFrame()
+            frame = q1.get(timeout = 1)
             segment = frame[:,250:280,0]
             spectra = np.mean(segment, axis = 1)
             segment = frame[:,350:380,0]
@@ -284,6 +391,7 @@ try:
             m = max(np.max(spectra),
                     np.max(spectra1))
             state = v4l2.optimize_expo(m)
+
 
 
 
@@ -313,6 +421,9 @@ try:
         # saving
         fnametag = '{}/{}_{:04d}_s{:05d}'.format(outdir, tag, iii+1, int(time.time() - time_init))
         if outdir != None: #meaning it should save
+            #if 'jpg' in datatypes:
+            #    im = Image.fromarray(f2)
+            #    im.save('{}.jpg'.format(fnametag))
             if 'bmp' in datatypes:
                 im = Image.fromarray(frame)
                 im.save('{}.bmp'.format(fnametag))
@@ -361,10 +472,14 @@ except KeyboardInterrupt:
 
 
 if eng == 'ffmpeg':
+    stop_threads = True
+    time.sleep(1)
     #p1.terminate()
+
     #p2.terminate()
     p1.kill()
     p2.kill()
+    #p2.kill()
     time.sleep(1)
 
 ##################################################

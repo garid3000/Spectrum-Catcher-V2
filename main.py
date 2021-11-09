@@ -12,39 +12,39 @@ def init():
     curses.curs_set(False)
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    #bm.addTagButton("計測", tag="mb1", buttonId="a", show=True)
+    bm.addTagButton(   0, 1, 3,  7, "Meas.",    tag="mb1", buttonId="a", show=True)
+    bm.addTagButton(   3, 1, 3,  7, "Setup",    tag="mb2", buttonId="b", show=True)
+    bm.addTagButton(   6, 1, 3,  7, "Data" ,    tag="mb3", buttonId="c", show=True)
+    bm.addTagButton(   9, 1, 3,  7, "About",    tag="mb4", buttonId="d", show=True)
+    bm.addTagButton(  12, 1, 3,  7, "Sys." ,    tag="mb5", buttonId="e", show=True)
 
-    #bm.addTagButton(   1, 1, 3,  7, "計測", tag="mb1", buttonId="a", show=True)
-    bm.addTagButton(   0, 1, 3,  7, "Meas.", tag="mb1", buttonId="a", show=True)
-    bm.addTagButton(   3, 1, 3,  7, "Setup", tag="mb2", buttonId="b", show=True)
-    bm.addTagButton(   6, 1, 3,  7, "Data" , tag="mb3", buttonId="c", show=True)
-    bm.addTagButton(   9, 1, 3,  7, "About", tag="mb4", buttonId="d", show=True)
-    bm.addTagButton(  12, 1, 3,  7, "Sys.", tag="mb5", buttonId="e", show=True)
+    bm.addButton(1+ 1, 9, 4, 14, "Capture",     tag="mb1", buttonId="mb1_1" )
+    bm.addButton(1+ 1,23, 4, 14, "Expo-calib",  tag="mb1", buttonId="mb1_1a")
+    bm.addButton(1+ 5, 9, 4, 14, "M-Shot(v1)",  tag="mb1", buttonId="mb1_2" )
+    bm.addButton(1+ 5,23, 4, 14, "M-Shot(v2)",  tag="mb1", buttonId="mb1_2a")
+    bm.addButton(1+ 9, 9, 4, 14, "P/view cam",  tag="mb1", buttonId="mb1_3" )
+    bm.addButton(1+ 9,23, 4, 14, "P/view spe",  tag="mb1", buttonId="mb1_4" )
 
-    bm.addButton(1+ 1, 9, 4, 14, "1-Shot",     tag="mb1", buttonId="mb1_1")
-    bm.addButton(1+ 1,23, 4, 14, "1-Shot(raw)",tag="mb1", buttonId="mb1_1a")
-    bm.addButton(1+ 5, 9, 4, 14, "M-Shot(v1)", tag="mb1", buttonId="mb1_2")
-    bm.addButton(1+ 5,23, 4, 14, "M-Shot(v2)", tag="mb1", buttonId="mb1_2a")
-    bm.addButton(1+ 9, 9, 4, 14, "P/view cam", tag="mb1", buttonId="mb1_3")
-    bm.addButton(1+ 9,23, 4, 14, "P/view spe", tag="mb1", buttonId="mb1_4")
+    bm.addButton(1+ 1, 9, 4, 14, "Expo",        tag="mb2", buttonId="mb2_1")
+    bm.addButton(1+ 5, 9, 4, 14, "Gain",        tag="mb2", buttonId="mb2_2")
+    bm.addButton(1+ 9, 9, 4, 14, "M-shot (v1)", tag="mb2", buttonId="mb2_3")
+    bm.addButton(1+ 9, 9, 4, 14, "M-shot (v2)", tag="mb2", buttonId="mb2_4")
+    #bm.addButton(1+ 7, 9, 3, 14, "Timer",      tag="mb2", buttonId="mb2_3")
+    #bm.addButton(1+10, 9, 3, 14, "Multi",      tag="mb2", buttonId="mb2_4")
 
-    bm.addButton(1+ 1, 9, 3, 14, "Expo",      tag="mb2", buttonId="mb2_1")
-    bm.addButton(1+ 4, 9, 3, 14, "Gain",      tag="mb2", buttonId="mb2_2")
-    #bm.addButton(1+ 7, 9, 3, 14, "Timer",     tag="mb2", buttonId="mb2_3")
-    #bm.addButton(1+10, 9, 3, 14, "Multi",     tag="mb2", buttonId="mb2_4")
+    bm.addButton(1+ 1, 9, 4, 14, "Copy data",   tag="mb3", buttonId="mb3_1")
+    bm.addButton(1+ 5, 9, 4, 14, "Move data",   tag="mb3", buttonId="mb3_2")
+    bm.addButton(1+ 9, 9, 4, 14, "Del. data",   tag="mb3", buttonId="mb3_3")
+    bm.addButton(1+ 1,23,12, 14, "",            tag="mb3", buttonId="mb3_4",boxshow=False)
 
-    bm.addButton(1+ 1, 9, 3, 14, "Copy data", tag="mb3", buttonId="mb3_1")
-    bm.addButton(1+ 4, 9, 3, 14, "Move data", tag="mb3", buttonId="mb3_2")
-    bm.addButton(1+ 7, 9, 3, 14, "Del. data", tag="mb3", buttonId="mb3_3")
-    bm.addButton(1+ 1,23,12, 14, "", tag="mb3", buttonId="mb3_4",boxshow=False)
-
-
-
-    bm.addButton(   1, 9,13, 28, aboutstr,    tag="mb4", buttonId="mb4_1",boxshow=False)
-    bm.addButton(   1, 10, 3, 20, "---- System -----",
+    bm.addButton(   1, 9,13, 28, aboutstr,      tag="mb4", buttonId="mb4_1",boxshow=False)
+    bm.addButton(   1,10, 3, 20, "---- System -----",
                                   tag="mb5", buttonId="mb5_1", boxshow=False)
-    bm.addButton(1+ 4, 15, 3, 10, "Shutdown", tag="mb5", buttonId="mb5_2")
-    bm.addButton(1+ 7, 15, 3, 10, "Reboot",   tag="mb5", buttonId="mb5_3")
-    bm.addButton(1+10, 15, 3, 10, "Update",   tag="mb5", buttonId="mb5_4")
+    bm.addButton(1+ 5, 9, 4, 14, "Shutdown",    tag="mb5", buttonId="mb5_2")
+    bm.addButton(1+ 5,23, 4, 14, "Reboot",      tag="mb5", buttonId="mb5_3")
+    bm.addButton(1+ 9, 9, 4, 14, "Update",      tag="mb5", buttonId="mb5_4")
+    bm.addButton(1+ 9,23, 4, 14, "Calibration", tag="mb5", buttonId="mb5_5")
     #bm.addButton(1+10, 9, 3, 14, "---------", tag="mb3", buttonId="mb3_4")
 
     bm.setCallback('mb1_1', callback_mb1_1)
@@ -55,6 +55,9 @@ def init():
     bm.setCallback('mb2_1', callback_mb2_1)
     bm.setCallback('mb2_2', callback_mb2_2)
 
+    bm.setCallback('mb3_1', callback_mb3_1)
+    bm.setCallback('mb3_2', callback_mb3_2)
+    bm.setCallback('mb3_3', callback_mb3_3)
     bm.setCallback('mb3_4', callback_mb3_4)
 
     bm.setCallback('mb5_2', callback_mb5_2)
@@ -62,6 +65,15 @@ def init():
     bm.setCallback('mb5_3', callback_mb5_3)
 
 
+def callback_mb3_1():
+    os.system('bash ~/Spectrum-Catcher-V2/data_transfer.sh $(ls /dev/sda* | tail -n 1) cp')
+    os.system('clear')
+def callback_mb3_2():
+    os.system('bash ~/Spectrum-Catcher-V2/data_transfer.sh $(ls /dev/sda* | tail -n 1) mv')
+    os.system('clear')
+def callback_mb3_3():
+    os.system('rm -v /home/pi/Data*')
+    os.system('clear')
 
 def callback_mb3_4():
     files = os.listdir('/home/pi/Data')
@@ -80,7 +92,9 @@ def callback_mb3_4():
     listoffiles+= '   -png: {}\n'.format(npng)
 
     listoffiles+= '   last file:\n  '
-    listoffiles+= files[-1]
+    if nfiles:
+        listoffiles+= files[-1]
+
 
     bm.setLabel('mb3_4', listoffiles)
     #os.system('bash /home/pi/shells/shot1.sh')
