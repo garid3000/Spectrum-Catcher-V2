@@ -19,11 +19,14 @@ def init():
     bm.addTagButton(  12, 1, 3,  7, "Sys." ,    tag="mb5", buttonId="e", show=True)
 
     bm.addButton(1+ 1, 9, 4, 14, "Capture",     tag="mb1", buttonId="mb1_1" )
-    bm.addButton(1+ 1,23, 4, 14, "Expo-calib",  tag="mb1", buttonId="mb1_1a")
-    bm.addButton(1+ 5, 9, 4, 14, "M-Shot(v1)",  tag="mb1", buttonId="mb1_2" )
-    bm.addButton(1+ 5,23, 4, 14, "M-Shot(v2)",  tag="mb1", buttonId="mb1_2a")
-    bm.addButton(1+ 9, 9, 4, 14, "P/view cam",  tag="mb1", buttonId="mb1_3" )
-    bm.addButton(1+ 9,23, 4, 14, "P/view spe",  tag="mb1", buttonId="mb1_4" )
+    bm.addButton(1+ 1,23, 4, 14, "-        ",  tag="mb1", buttonId="mb1_1a")
+    bm.addButton(1+ 5, 9, 4, 14, ".        ",  tag="mb1", buttonId="mb1_2" )
+    bm.addButton(1+ 5,23, 4, 14, ":        ",  tag="mb1", buttonId="mb1_2a")
+    #bm.addButton(1+ 1,23, 4, 14, "Expo-calib",  tag="mb1", buttonId="mb1_1a")
+    #bm.addButton(1+ 5, 9, 4, 14, "M-Shot(v1)",  tag="mb1", buttonId="mb1_2" )
+    #bm.addButton(1+ 5,23, 4, 14, "M-Shot(v2)",  tag="mb1", buttonId="mb1_2a")
+    bm.addButton(1+ 9, 9, 4, 14, "CAMERA",  tag="mb1", buttonId="mb1_3" )
+    bm.addButton(1+ 9,23, 4, 14, "SPECTRUM",  tag="mb1", buttonId="mb1_4" )
 
     bm.addButton(1+ 1, 9, 4, 14, "Expo",        tag="mb2", buttonId="mb2_1")
     bm.addButton(1+ 5, 9, 4, 14, "Gain",        tag="mb2", buttonId="mb2_2")
@@ -47,7 +50,7 @@ def init():
     #bm.addButton(1+10, 9, 3, 14, "---------", tag="mb3", buttonId="mb3_4")
 
     bm.setCallback('mb1_1', callback_mb1_1)
-    bm.setCallback('mb1_2', callback_mb1_2)
+    #bm.setCallback('mb1_2', callback_mb1_2)
     bm.setCallback('mb1_3', callback_mb1_3)
     bm.setCallback('mb1_4', callback_mb1_4)
 
