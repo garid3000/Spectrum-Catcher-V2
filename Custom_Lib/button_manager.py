@@ -125,6 +125,7 @@ class Buttons_manager():
             if tmp1:
                 time.sleep(.05)
                 eachbutton.callback()
+                return eachbutton.label
 
 
         if tmp: #i.e. clicked on button

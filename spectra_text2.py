@@ -1,23 +1,16 @@
-#import cv2, time
-import time, sys, os
-import getopt
-import subprocess
-from threading  import Thread
-from queue import Queue, Empty
+import time, sys, os                # system libraries
+import getopt                       # for parsing user arguments
+import subprocess                   # for getting pipe-d (image data) from ffmpeg
+from threading  import Thread       # parallel processing
+from queue import Queue, Empty      # from reading parallel process
 
-import numpy as np
-from PIL import Image
-import plotext as plt
+import numpy as np                  # data array manipulation
+from PIL import Image               # for saving as bmp
+import plotext as plt               # for plotting on text screen
 
-from Custom_Lib.pyv4l2 import Py_v4l2
-from queue import Queue, Empty
+from Custom_Lib.pyv4l2 import Py_v4l2 # for changing v4l2-ctl camera expo
 
 
-
-
-# reading system argv
-# possible usage
-# until optimize,
 
 
 longopts = ["verbose",
@@ -174,47 +167,29 @@ stop_threads = False
 if eng == 'ffmpeg':       #from ffmpeg
     command = ['ffmpeg',
                '-hide_banner',  '-loglevel', 'error',
-               '-i', device,
-               #'-i', '/dev/video2',
+               '-i', device, #'-i', '/dev/video2',
                '-f', 'image2pipe',
                '-pix_fmt', 'bgr24',
-               '-r', '5',
-               #'-video_size', '1280x720',
-               #'-video_size', '480x640',
+               '-r', '5',  #'-video_size', '1280x720', '-video_size', '480x640',
                '-vcodec', 'rawvideo',
                '-an', '-sn',
-               '-'
-               #'-map', '0',  '-',
-               #'-map', '1',  '/dev/fb0'
+               '-' #'-map', '0',  '-', #'-map', '1',  '/dev/fb0'
                ]
 
     command2 = ['ffmpeg',
-               '-hide_banner',  '-loglevel', 'error',
-               #'-i', device,
+               '-hide_banner',  '-loglevel', 'error', #'-i', device,
                '-i', '/dev/video2',
                '-f', 'image2pipe',
                '-pix_fmt', 'bgra',
-               '-r', '5',
-               #'-video_size', '1280x720',
-               #'-video_size', '480x640',
+               '-r', '5', #'-video_size', '1280x720',#'-video_size', '480x640',
                '-vcodec', 'rawvideo',
                '-an', '-sn',
-               '-'
-               #'-map', '0',  '-',
-               #'-map', '1',  '/dev/fb0'
+               '-' #'-map', '0',  '-', #'-map', '1',  '/dev/fb0'
                ]
-    #command1 = ['ffmpeg',
-    #           '-hide_banner',  '-loglevel', 'error',
-    #           '-i', '/dev/video2',
-    #           #'-pix_fmt', 'bgr24',
-    #           '-pix_fmt', 'bgra',
-    #           '-f', 'fbdev', '/dev/fb0'
-    #           ]
-    # Open sub-process that gets in_stream as input and uses stdout as an output PIPE.
     #p1 = subprocess.Popen(command,  stdout=subprocess.PIPE)
     #if showfb:
-    #    p2 = subprocess.Popen(command2, stdout=subprocess.PIPE)
-    #p2 = subprocess.Popen(command1)
+    #   p2 = subprocess.Popen(command2, stdout=subprocess.PIPE)
+    #   p2 = subprocess.Popen(command1)
 
 
     def readFrame():
@@ -256,8 +231,7 @@ if eng == 'ffmpeg':       #from ffmpeg
 
     def paralel2(out, queue2):
         global stop_threads
-        w = 1024
-        h = 768
+        w, h = 1024, 768
         while 1:
             raw_frame = out.read(w * h * 4)
             frame = np.frombuffer(raw_frame, np.uint8)
@@ -268,9 +242,9 @@ if eng == 'ffmpeg':       #from ffmpeg
             if stop_threads:
                 break
 
-            with open('/dev/fb0', 'rb+') as buf:
-                #f2 = readFrame2()
-                buf.write(f2)
+            if showfb:
+                with open('/dev/fb0', 'rb+') as buf:
+                    buf.write(f2)
 
     ON_POSIX = 'posix' in sys.builtin_module_names
     p1 = subprocess.Popen(command,  stdout=subprocess.PIPE, close_fds=ON_POSIX)
@@ -306,30 +280,40 @@ v4l2 = Py_v4l2(device,
 
 
 
-#while 1:
 if show:
     print('\033c')
     print('\x1bc')
 time_init = time.time()
+
+
 try:
     for iii in range(num):
         time_fori = time_init + iii * timersec
         #print(time_fori)
         #if showfb:
-        if False:
-            f2 = q2.get(timeout=1)
-            while 1:
-                if q2.empty():
-                    break
-                f2 = q2.get(timeout = 1)
-            with open('/dev/fb0', 'rb+') as buf:
-                #f2 = readFrame2()
-                buf.write(f2)
-                time.sleep(.1)
+        #if False:
+        #    f2 = q2.get(timeout=1)
+        #    while 1:
+        #        if q2.empty():
+        #            break
+        #        f2 = q2.get(timeout = 1)
+        #    with open('/dev/fb0', 'rb+') as buf:
+        #        #f2 = readFrame2()
+        #        buf.write(f2)
+        #        time.sleep(.1)
 
         while time.time() <= time_fori:
-            time.sleep(.1)
-            #print(time.time(), time_fori)
+            #print(time.time(), time_fori, q1.qsize(), q2.qsize())
+            #time.sleep(.1)
+            try:
+                line = q2.get(timeout = .1)
+            except Empty:
+                pass #print()
+            else:
+                pass
+
+
+
 
 
         #reading cam and getting spectrum

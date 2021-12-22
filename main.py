@@ -12,7 +12,6 @@ def init():
     curses.curs_set(False)
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    #bm.addTagButton("計測", tag="mb1", buttonId="a", show=True)
     bm.addTagButton(   0, 1, 3,  7, "Meas.",    tag="mb1", buttonId="a", show=True)
     bm.addTagButton(   3, 1, 3,  7, "Setup",    tag="mb2", buttonId="b", show=True)
     bm.addTagButton(   6, 1, 3,  7, "Data" ,    tag="mb3", buttonId="c", show=True)
@@ -107,22 +106,30 @@ def callback_mb1_1():
 
 
 def  callback_mb1_2():
-    os.system("bash clear;sudo setfont /etc/console-setup/cached_Uni2-TerminusBold16.psf.gz;cd /home/pi/Spectrum-Catcher-V2;python3 spectra_text.py -D $(cat pm/device) -o $(cat pm/output) -d $(cat pm/datatype) -O $(cat pm/optimize) -e $(cat pm/engine) -n $(cat pm/number) -t $(cat pm/timer) -p $(cat pm/pov) -s -M $(cat pm/optupper) -m $(cat pm/optlower) -N $(date '+%b-%d_%H%M%S');clear;sudo setfont /etc/console-setup/cached_Uni2-Terminus32x16.psf.gz")
+    #os.system("bash clear;sudo setfont /etc/console-setup/cached_Uni2-TerminusBold16.psf.gz;cd /home/pi/Spectrum-Catcher-V2;python3 spectra_text2.py -D $(cat pm/device) -o $(cat pm/output) -d $(cat pm/datatype) -O $(cat pm/optimize) -e $(cat pm/engine) -n $(cat pm/number) -t $(cat pm/timer) -p $(cat pm/pov) -s -M $(cat pm/optupper) -m $(cat pm/optlower) -N $(date '+%b-%d_%H%M%S');clear;sudo setfont /etc/console-setup/cached_Uni2-Terminus32x16.psf.gz")
+    curses.nocbreak()
+    #stdscr.keypad(False)
+    curses.echo()
+
+    os.system("bash shower.sh")
     curses.curs_set(False)
 
 def callback_mb1_3():
     os.system('bash ~/Spectrum-Catcher-V2/preview_cam.sh')
     #os.system('bash /home/pi/shells/preview_cam.sh')
     curses.curs_set(False)
+    bm.refresh(1, 1)
 
 def callback_mb1_4():
     curses.endwin()
     #os.system('bash /home/pi/shells/preview_spe.sh')
     #os.system('bash /home/pi/main2/shower.sh')
-    os.system('bash ~/Spectrum-Catcher-V2/shower.sh')
+    #os.system('bash ~/Spectrum-Catcher-V2/shower.sh')
+    os.system('bash ~/Spectrum-Catcher-V2/preview_spe.sh')
     bm.stdscr.keypad(False)
     curses.echo()
     curses.curs_set(False)
+    bm.refresh(1, 1)
 
 def callback_mb2_1():
     #os.system('python3 /home/pi/main2/setup_expo.py')
